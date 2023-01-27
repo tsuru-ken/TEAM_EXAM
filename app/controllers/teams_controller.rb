@@ -1,6 +1,6 @@
 class TeamsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_team, only: %i[show edit update destroya ssign_owner]
+  before_action :set_team, only: %i[show edit update destroy assign_owner]
 
   def index
     @teams = Team.all
@@ -55,8 +55,8 @@ class TeamsController < ApplicationController
     if @team.owner_id == current_user.id
       @team.update(owner_id: params[:owner_id])
       @user = User.find(@team.owner_id)
-      AssignMailer.ssign_owner_email(@user.email).deliver
-      redirect_to @team, notice: I18n.t('views.messages.authrity_transfer')
+      AssignMailer.assign_owner_email(@user.email).deliver
+      redirect_to @team, notice: I18n.t('views.messages.authority_transfer')
     end
   end
 
