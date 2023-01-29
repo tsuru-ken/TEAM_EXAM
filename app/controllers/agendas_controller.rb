@@ -1,15 +1,12 @@
 class AgendasController < ApplicationController
   # before_action :set_agenda, only: %i[show edit update destroy]
-
   def index
     @agendas = Agenda.all
   end
-
   def new
     @team = Team.friendly.find(params[:team_id])
     @agenda = Agenda.new
   end
-
   def create
     @agenda = current_user.agendas.build(title: params[:title])
     @agenda.team = Team.friendly.find(params[:team_id])
@@ -21,12 +18,23 @@ class AgendasController < ApplicationController
     end
   end
 
+  def destroy
+    set_agenda
+    if current_user.id == @agenda.user.id || current_user.id == @agenda.team.owner_id
+      @members = @agenda.team.members
+      @agenda.destroy
+      @members.each do |member|
+        AssignMailer.agenda_destroy_mail(member.email).deliver
+      end
+      redirect_to dashboard_url
+    end
+  end
+
   private
 
   def set_agenda
     @agenda = Agenda.find(params[:id])
   end
-
   def agenda_params
     params.fetch(:agenda, {}).permit %i[title description]
   end

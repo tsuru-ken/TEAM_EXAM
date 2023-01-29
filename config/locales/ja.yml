@@ -253,6 +253,9 @@ ja:
       edit_profile: 'プロフィールを編集'
       team_you_belong_to: '所属しているチーム'
       posted_articles: '投稿した記事一覧'
+      leader_only_edit: 'チームリーダーしか編集できません'
+      leader_or_mine_destroy: 'チームリーダー又は自分自身しか削除できません'
+      agenda_delete: 'アジェンダが削除されました'
     button:
       submit: '投稿'
       edit: '編集'
